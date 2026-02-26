@@ -408,5 +408,90 @@ body.practiceMode .controlsBig .btn{
   font-size: clamp(16px, 4.2vw, 20px);
 }
 
+  /* ================
+   Practice Mode: single-screen, no scroll
+   ================ */
+body.practiceMode{
+  overflow: hidden; /* ✅ 整頁不捲動 */
+}
+
+/* footer 在練習模式隱藏，省高度 */
+body.practiceMode .footer{
+  display: none;
+}
+
+/* ✅ 用 JS 實際量到的 topbar 高度，避免算錯而溢出 */
+body.practiceMode .container{
+  height: calc(100svh - var(--topbar-h, 72px));
+  overflow: hidden;
+  padding: 10px 10px max(10px, env(safe-area-inset-bottom));
+}
+
+/* 練習頁佔滿 container */
+body.practiceMode #viewPractice{
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+}
+
+/* 上面狀態列固定 */
+body.practiceMode .practiceTop{
+  flex: 0 0 auto;
+  margin-bottom: 6px;
+}
+
+/* 舞台吃剩下空間 */
+body.practiceMode .stage{
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* 手機上把提示縮短高度（你也可以保留） */
+@media (max-width: 520px){
+  body.practiceMode .hint{
+    font-size: 13px;
+    gap: 6px;
+  }
+}
+
+/* 卡片吃掉剩下高度，不會撐爆 */
+body.practiceMode .flashcard{
+  flex: 1 1 auto;
+  height: auto;
+  min-height: 170px;
+  width: 100%;
+  max-width: 520px;
+  margin: 0 auto;
+}
+
+/* ✅ 4 顆按鈕：寬螢幕一排四顆；小螢幕變 2x2（仍不捲動，卡片會自動縮） */
+body.practiceMode .controlsBig{
+  flex: 0 0 auto;
+  width: 100%;
+  max-width: 520px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+
+@media (max-width: 520px){
+  body.practiceMode .controlsBig{
+    grid-template-columns: 1fr 1fr; /* 2x2 */
+  }
+}
+
+/* 按鈕大小：手機不會太高，避免把內容擠出螢幕 */
+body.practiceMode .controlsBig .btn{
+  min-width: 0;
+  min-height: 52px;
+  padding: 14px 10px;
+  font-size: clamp(16px, 4.2vw, 20px);
+}
+
   
 }
