@@ -271,6 +271,7 @@ function startPractice(){
   showCard();
 
   setTimeout(() => el.card.focus(), 0);
+  document.body.classList.add("practiceMode");
 }
 
 function showCard(){
@@ -424,6 +425,7 @@ function goHome(){
   setActiveChoice(el.btnModeMulti, false);
 
   goStep(1);
+  document.body.classList.remove("practiceMode");
 }
 
 function show(node){ node.classList.remove("hidden"); }
