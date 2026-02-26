@@ -48,6 +48,9 @@ document.addEventListener("DOMContentLoaded", async () => {
   el.btnStep3Back = $("btnStep3Back");
   el.btnStart = $("btnStart");
 
+  el.btnPrev = $("btnPrev");
+  el.btnPrev.addEventListener("click", prevCard);
+
   // Practice view
   el.viewPractice = $("viewPractice");
   el.progressText = $("progressText");
@@ -86,19 +89,19 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   el.card.addEventListener("click", flipCard);
 
-  el.card.addEventListener("touchstart", (e) => {
-    if (!e.touches?.length) return;
-    state.touchStartY = e.touches[0].clientY;
-  }, { passive: true });
+  // el.card.addEventListener("touchstart", (e) => {
+  //   if (!e.touches?.length) return;
+  //   state.touchStartY = e.touches[0].clientY;
+  // }, { passive: true });
 
-  el.card.addEventListener("touchend", (e) => {
-    if (state.touchStartY == null) return;
-    const endY = e.changedTouches?.[0]?.clientY;
-    if (endY == null) return;
-    const dy = endY - state.touchStartY;
-    state.touchStartY = null;
-    if (dy < -60) nextCard();
-  }, { passive: true });
+  // el.card.addEventListener("touchend", (e) => {
+  //   if (state.touchStartY == null) return;
+  //   const endY = e.changedTouches?.[0]?.clientY;
+  //   if (endY == null) return;
+  //   const dy = endY - state.touchStartY;
+  //   state.touchStartY = null;
+  //   if (dy < -60) nextCard();
+  // }, { passive: true });
 
   el.btnFlip.addEventListener("click", flipCard);
   el.btnNext.addEventListener("click", nextCard);
@@ -272,6 +275,12 @@ function startPractice(){
 
   setTimeout(() => el.card.focus(), 0);
   document.body.classList.add("practiceMode");
+
+  const topbar = document.querySelector(".topbar");
+  if (topbar) {
+    document.documentElement.style.setProperty("--topbar-h", `${topbar.offsetHeight}px`);
+  }
+  
 }
 
 function showCard(){
@@ -314,6 +323,13 @@ function nextCard(){
   if (state.sessionIndex >= total) return;
 
   state.sessionIndex += 1;
+  setFlipped(false);
+  showCard();
+}
+
+function prevCard(){
+  if (state.sessionIndex <= 0) return;
+  state.sessionIndex -= 1;
   setFlipped(false);
   showCard();
 }
