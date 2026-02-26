@@ -183,6 +183,7 @@ p{ line-height: 1.55; }
   gap: 12px;
   margin-top: 10px;
   position: relative;
+  width: 100%;
 }
 
 .hint{
@@ -196,11 +197,13 @@ p{ line-height: 1.55; }
 
 /* Flashcard */
 .flashcard{
-  width: min(520px, 94vw);
   height: clamp(240px, 52vh, 360px);
   perspective: 1200px;
   outline: none;
   touch-action: manipulation;
+  width: 100%;
+  max-width: 520px;
+  margin: 0 auto;
 }
 .flashcard-inner{
   width: 100%;
@@ -259,8 +262,9 @@ p{ line-height: 1.55; }
   flex-wrap: wrap;
   justify-content: center;   /* 置中 */
   gap: 14px;
-  width: min(520px, 94vw);
-  margin: 0 auto;            /* 整塊容器置中 */
+  width: 100%;
+  max-width: 520px;
+  margin: 0 auto;
 }
 
 /* 按鈕大小一致、好按，手機會自動換行但仍置中 */
@@ -299,4 +303,35 @@ p{ line-height: 1.55; }
 /* 讓「上一步 / 下一步」那一排置中 */
 .row{
   justify-content: center;
+}
+
+@media (max-width: 480px){
+  /* Reduce extra padding on small screens */
+  .container{ padding: 10px 10px 14px; }
+  .panel{ padding: 10px; }
+
+  /* Optional: hide hint to save vertical space */
+  .hint{ display: none; }
+
+  /* Make the card shorter so buttons fit without scrolling */
+  .flashcard{
+    height: 42svh;   /* stable viewport height on mobile */
+    min-height: 220px;
+    max-height: 300px;
+  }
+
+  /* Keep all 3 buttons in ONE row (no wrap -> less height) */
+  .controlsBig{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 10px;
+  }
+
+  /* Slightly smaller on phone so they fit, still elderly-friendly */
+  .controlsBig .btn{
+    min-height: 54px;
+    font-size: 18px;
+    padding: 14px 10px;
+    min-width: 0; /* allow grid to shrink properly */
+  }
 }
