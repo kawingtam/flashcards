@@ -1,0 +1,34 @@
+{
+  "sets": [
+    {
+      "id": "set1",
+      "name": "Set 1 — Basics",
+      "cards": [
+        { "zh": "你好", "en": "hello" },
+        { "zh": "謝謝", "en": "thank you" },
+        { "zh": "再見", "en": "goodbye" },
+        { "zh": "對不起", "en": "sorry" }
+      ]
+    },
+    {
+      "id": "set2",
+      "name": "Set 2 — Daily",
+      "cards": [
+        { "zh": "水", "en": "water" },
+        { "zh": "咖啡", "en": "coffee" },
+        { "zh": "洗手間", "en": "restroom" },
+        { "zh": "多少錢？", "en": "how much?" }
+      ]
+    },
+    {
+      "id": "set3",
+      "name": "Set 3 — Travel",
+      "cards": [
+        { "zh": "地鐵", "en": "subway" },
+        { "zh": "車站", "en": "station" },
+        { "zh": "我迷路了", "en": "I'm lost" },
+        { "zh": "可以幫我嗎？", "en": "can you help me?" }
+      ]
+    }
+  ]
+}

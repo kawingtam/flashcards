@@ -1,0 +1,302 @@
+:root{
+  --bg: #f8fafc;
+  --panel: #ffffff;
+  --panel2: #f1f5f9;
+  --text: #0f172a;
+  --muted: #475569;
+  --border: rgba(15, 23, 42, 0.12);
+  --shadow: rgba(2, 6, 23, 0.12);
+
+  --primary: #2563eb;
+  --primary2: #60a5fa;
+
+  --radius: 18px;
+}
+
+*{ box-sizing: border-box; }
+html, body{ height: 100%; }
+body{
+  margin: 0;
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans";
+  font-size: 18px; /* 長輩友善：字體稍大 */
+  color: var(--text);
+  background:
+    radial-gradient(900px 500px at 15% 0%, rgba(96,165,250,0.35), transparent 60%),
+    radial-gradient(700px 450px at 95% 10%, rgba(34,197,94,0.20), transparent 55%),
+    linear-gradient(180deg, #ffffff, var(--bg));
+}
+
+.topbar{
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display:flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--border);
+  background: rgba(255,255,255,0.9);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 10px 28px rgba(2, 6, 23, 0.10);
+}
+
+.brand{ display:flex; align-items:center; gap: 10px; }
+.logo{ font-size: 22px; }
+.title{ font-weight: 900; letter-spacing: .2px; }
+.subtitle{ color: var(--muted); font-size: 13px; margin-top: 2px; }
+
+.container{
+  max-width: 760px; /* 更簡單：不要太寬 */
+  margin: 0 auto;
+  padding: 16px 12px 26px;
+}
+
+.panel{
+  background: rgba(255,255,255,0.86);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: 0 18px 50px var(--shadow);
+  padding: 14px;
+}
+
+h1{
+  margin: 6px 0 10px;
+  font-size: clamp(20px, 4vw, 28px);
+}
+h2{
+  margin: 0 0 10px;
+  font-size: 18px;
+}
+p{ line-height: 1.55; }
+.muted{ color: var(--muted); }
+.small{ font-size: 14px; }
+.hidden{ display:none !important; }
+
+.row{
+  display:flex;
+  gap: 10px;
+  align-items:center;
+  margin-top: 12px;
+  flex-wrap: wrap;
+}
+
+/* 大按鈕（引導式選項） */
+.choiceGrid{
+  display:grid;
+  grid-template-columns: 1fr; /* 單欄：手機/長輩更清楚 */
+  gap: 12px;
+  margin-top: 10px;
+}
+
+.bigChoice{
+  border: 1px solid var(--border);
+  background: #fff;
+  border-radius: 20px;
+  padding: 16px;
+  text-align: left;
+  cursor: pointer;
+  box-shadow: 0 10px 24px rgba(2,6,23,0.08);
+  min-height: 70px;
+}
+.bigChoice:hover{ border-color: rgba(37,99,235,0.25); }
+.bigChoice:active{ transform: translateY(1px); }
+
+.bigChoiceTitle{
+  font-weight: 900;
+  font-size: 20px;
+}
+.bigChoiceDesc{
+  margin-top: 6px;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+/* 選擇組別（單欄盒子） */
+.setList{
+  display:grid;
+  gap: 12px;
+  margin-top: 10px;
+}
+.setList.oneColumn{ grid-template-columns: 1fr; }
+
+.setItem{
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  background: #ffffff;
+  box-shadow: 0 8px 18px rgba(2,6,23,0.06);
+}
+.setItem label{
+  display:flex;
+  gap: 12px;
+  align-items:flex-start;
+  cursor:pointer;
+  padding: 14px;
+  width: 100%;
+}
+.setItem strong{ display:block; font-weight: 900; }
+.setItem .meta{ margin-top: 4px; font-size: 14px; color: var(--muted); }
+
+.btn{
+  border: 1px solid var(--border);
+  background: #ffffff;
+  color: var(--text);
+
+  /* ✅ 更大、更好按 */
+  padding: 18px 22px;
+  min-height: 60px;
+  font-size: 20px;
+  font-weight: 800;
+
+  border-radius: 20px;
+  cursor:pointer;
+  box-shadow: 0 8px 18px rgba(2,6,23,0.06);
+}
+
+
+.btn:hover{ border-color: rgba(37,99,235,0.25); }
+.btn:active{ transform: translateY(1px); }
+.btn:disabled{ opacity: 0.55; cursor: not-allowed; box-shadow:none; }
+
+.btn.primary{
+  border-color: rgba(37,99,235,0.25);
+  background: linear-gradient(180deg, rgba(96,165,250,0.55), rgba(37,99,235,0.35));
+  color: #0b1220;
+}
+.btn.ghost{
+  background: transparent;
+  box-shadow: none;
+}
+
+.practiceTop{
+  display:flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+.progress{ font-weight: 900; }
+
+.stage{
+  display:grid;
+  justify-items:center;
+  gap: 12px;
+  margin-top: 10px;
+  position: relative;
+}
+
+.hint{
+  display:flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content:center;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+/* Flashcard */
+.flashcard{
+  width: min(520px, 94vw);
+  height: clamp(240px, 52vh, 360px);
+  perspective: 1200px;
+  outline: none;
+  touch-action: manipulation;
+}
+.flashcard-inner{
+  width: 100%;
+  height: 100%;
+  border-radius: var(--radius);
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.45s cubic-bezier(.2,.8,.2,1);
+  box-shadow: 0 22px 60px rgba(2,6,23,0.14);
+}
+.flashcard.flipped .flashcard-inner{ transform: rotateY(180deg); }
+
+.face{
+  position:absolute;
+  inset:0;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  background: linear-gradient(180deg, #ffffff, rgba(241,245,249,0.65));
+  backface-visibility: hidden;
+  display:grid;
+  grid-template-rows: auto 1fr;
+  padding: 14px;
+  overflow:hidden;
+}
+.face.back{
+  transform: rotateY(180deg);
+  background:
+    radial-gradient(450px 260px at 30% 10%, rgba(34,197,94,0.22), transparent 60%),
+    linear-gradient(180deg, #ffffff, rgba(241,245,249,0.65));
+}
+
+.faceTop{ display:flex; align-items:center; }
+.badge{
+  font-size: 14px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: rgba(37,99,235,0.10);
+}
+
+.bigText{
+  display:grid;
+  place-items:center;
+  text-align:center;
+  font-size: clamp(30px, 7vw, 50px);
+  font-weight: 900;
+  letter-spacing: 0.2px;
+  padding: 10px;
+  line-height: 1.15;
+  user-select:none;
+}
+
+/* ✅ 朗讀/翻面/下一張：置中排列、可自動換行 */
+.controlsBig{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;   /* 置中 */
+  gap: 14px;
+  width: min(520px, 94vw);
+  margin: 0 auto;            /* 整塊容器置中 */
+}
+
+/* 按鈕大小一致、好按，手機會自動換行但仍置中 */
+.controlsBig .btn{
+  min-width: 150px;
+}
+
+@media (min-width: 560px){
+  .controlsBig{ grid-template-columns: 1fr 1fr 1fr 1fr; }
+}
+
+.doneBox{
+  position:absolute;
+  inset: auto 0 0 0;
+  margin: 0 auto;
+  width: min(520px, 94vw);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: rgba(255,255,255,0.94);
+  padding: 14px;
+  box-shadow: 0 22px 60px rgba(2,6,23,0.16);
+}
+
+.footer{
+  text-align:center;
+  padding: 12px 12px 18px;
+}
+
+/* 讓「朗讀/翻面/下一張」整排置中 */
+.controlsBig{
+  justify-content: center;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* 讓「上一步 / 下一步」那一排置中 */
+.row{
+  justify-content: center;
+}

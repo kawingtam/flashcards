@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#f8fafc" />
+  <title>單字卡練習（中文 ↔ 英文）</title>
+  <link rel="stylesheet" href="./styles.css" />
+  <script defer src="./app.js"></script>
+</head>
+
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo">🃏</div>
+      <div>
+        <div class="title">中文 ↔ 英文</div>
+      </div>
+    </div>
+
+    <div class="top-actions">
+      <button id="btnHome" class="btn ghost" title="回到首頁">回首頁</button>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- 引導式設定頁 -->
+    <section id="viewSetup" class="panel">
+      <h1>開始前，跟著做 3 個簡單選擇</h1>
+
+      <!-- Step 1 -->
+      <div id="step1" class="wizardStep">
+        <h2>第 1 步：想練習一組，還是多組？</h2>
+        <div class="choiceGrid">
+          <button id="btnModeSingle" class="bigChoice" type="button">
+            <div class="bigChoiceTitle">只練習一組</div>
+            <div class="bigChoiceDesc">適合想專心記一組單字</div>
+          </button>
+
+          <button id="btnModeMulti" class="bigChoice" type="button">
+            <div class="bigChoiceTitle">同時練習多組</div>
+            <div class="bigChoiceDesc">例如：選第 1 組 + 第 3 組</div>
+          </button>
+        </div>
+
+        <div class="row">
+          <button id="btnStep1Next" class="btn primary" disabled>下一步</button>
+        </div>
+      </div>
+
+      <!-- Step 2 -->
+      <div id="step2" class="wizardStep hidden">
+        <h2>第 2 步：請選擇要練習的組別</h2>
+        <p class="muted small" id="modeHint">—</p>
+
+        <!-- 單欄顯示選擇盒 -->
+        <div id="setList" class="setList oneColumn"></div>
+
+        <div class="row">
+          <button id="btnStep2Back" class="btn">上一步</button>
+          <button id="btnStep2Next" class="btn primary" disabled>下一步</button>
+        </div>
+      </div>
+
+      <!-- Step 3 -->
+      <div id="step3" class="wizardStep hidden">
+        <h2>第 3 步：想先看哪一種語言？</h2>
+
+        <div class="choiceGrid">
+          <button id="btnDirZhFirst" class="bigChoice" type="button">
+            <div class="bigChoiceTitle">先看中文（再翻到英文）</div>
+            <div class="bigChoiceDesc">中文 → 英文</div>
+          </button>
+
+          <button id="btnDirEnFirst" class="bigChoice" type="button">
+            <div class="bigChoiceTitle">先看英文（再翻到中文）</div>
+            <div class="bigChoiceDesc">英文 → 中文</div>
+          </button>
+        </div>
+
+        <div class="row">
+          <button id="btnStep3Back" class="btn">上一步</button>
+          <button id="btnStart" class="btn primary" disabled>開始練習</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 練習頁 -->
+    <section id="viewPractice" class="panel hidden">
+      <div class="practiceTop">
+        <div class="status">
+          <div id="progressText" class="progress">0 / 0</div>
+          <div id="setNamesText" class="muted small"></div>
+        </div>
+      </div>
+
+      <div class="stage">
+        <div class="hint">
+          <span>點卡片可翻面</span>
+          <span>往上滑＝下一張（不用翻面也可以）</span>
+        </div>
+
+        <div id="card" class="flashcard" role="button" aria-label="單字卡" tabindex="0">
+          <div class="flashcard-inner">
+            <div class="face front">
+              <div class="faceTop">
+                <span id="frontLangBadge" class="badge">中文</span>
+              </div>
+              <div id="frontText" class="bigText">—</div>
+            </div>
+            <div class="face back">
+              <div class="faceTop">
+                <span id="backLangBadge" class="badge">英文</span>
+              </div>
+              <div id="backText" class="bigText">—</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 大按鈕：更適合長輩 -->
+        <div class="controlsBig">
+          <button id="btnSpeak" class="btn">🔊 朗讀</button>
+          <button id="btnFlip" class="btn">翻面</button>
+          <button id="btnNext" class="btn primary">下一張</button>
+        </div>
+
+        <div id="doneBox" class="doneBox hidden">
+          <h2>完成啦 🎉</h2>
+          <p class="muted">已經練習完這次選擇的單字卡。</p>
+          <div class="row">
+            <button id="btnRestart" class="btn primary">再練一次</button>
+            <button id="btnBackToSets" class="btn">回到選擇組別</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer muted small">
+    朗讀功能使用瀏覽器內建語音（不同裝置可用聲音可能不同）。
+  </footer>
+</body>
+</html>
