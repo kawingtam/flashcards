@@ -334,4 +334,79 @@ p{ line-height: 1.55; }
     padding: 14px 10px;
     min-width: 0; /* allow grid to shrink properly */
   }
+
+  /* =========================
+   Practice full-screen layout
+   ========================= */
+body.practiceMode .footer{
+  display: none; /* 手機上省高度 */
+}
+
+/* 讓主內容區佔滿手機可視高度（扣掉上方 topbar） */
+body.practiceMode .container{
+  height: calc(100svh - 64px); /* 64px 約等於 topbar 高度 */
+  overflow: hidden;            /* ✅ 不要整頁捲動 */
+  padding: 10px 10px 12px;
+}
+
+/* 練習面板變成「上下排版」：上=進度，下=卡片+按鈕 */
+body.practiceMode #viewPractice{
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+}
+
+/* 上方狀態列固定高度 */
+body.practiceMode .practiceTop{
+  flex: 0 0 auto;
+  margin-bottom: 6px;
+}
+
+/* 中間舞台：卡片自動吃剩下高度 */
+body.practiceMode .stage{
+  flex: 1 1 auto;
+  min-height: 0;                 /* ✅ 讓內部可以縮 */
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+
+/* 提示文字在手機先隱藏（省高度；你要留也行） */
+@media (max-width: 520px){
+  body.practiceMode .hint{ display: none; }
+}
+
+/* 卡片：用 flex 吃剩下空間，避免超出 */
+body.practiceMode .flashcard{
+  flex: 1 1 auto;
+  height: auto;                  /* ✅ 不用固定 vh */
+  min-height: 180px;
+  width: 100%;
+  max-width: 520px;
+  margin: 0 auto;
+}
+
+/* 按鈕區：固定在卡片下方，同一屏內可見 */
+body.practiceMode .controlsBig{
+  flex: 0 0 auto;
+  width: 100%;
+  max-width: 520px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* ✅ 一排三顆，不佔兩行 */
+  gap: 10px;
+  padding-bottom: env(safe-area-inset-bottom); /* iPhone 底部安全區 */
+}
+
+/* 手機按鈕自適應，不會把版面撐爆 */
+body.practiceMode .controlsBig .btn{
+  min-width: 0;
+  min-height: 52px;
+  padding: 14px 10px;
+  font-size: clamp(16px, 4.2vw, 20px);
+}
+
+  
 }
