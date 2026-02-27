@@ -464,3 +464,13 @@ function escapeHtml(str){
     .replaceAll('"', "&quot;")
     .replaceAll("'", "&#039;");
 }
+
+function updateViewportVars(){
+  // iPhone/內建瀏覽器：用 innerHeight 才準
+  document.documentElement.style.setProperty("--app-h", `${window.innerHeight}px`);
+
+  const topbar = document.querySelector(".topbar");
+  if (topbar) {
+    document.documentElement.style.setProperty("--topbar-h", `${topbar.offsetHeight}px`);
+  }
+}
