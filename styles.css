@@ -492,6 +492,86 @@ body.practiceMode .controlsBig .btn{
   padding: 14px 10px;
   font-size: clamp(16px, 4.2vw, 20px);
 }
+  /* ========= Practice mode: single screen, no overflow ========= */
+:root{
+  --app-h: 100vh;      /* JS 會改成 window.innerHeight(px) */
+  --topbar-h: 72px;    /* JS 會改成實際 topbar 高度(px) */
+}
+
+body.practiceMode{
+  overflow: hidden; /* ✅ 整頁不捲動 */
+}
+
+body.practiceMode .footer{
+  display: none; /* 省高度，避免需要捲動 */
+}
+
+/* ✅ 用真正的 app 高度 - topbar 高度，避免 iPhone 底部溢出 */
+body.practiceMode .container{
+  height: calc(var(--app-h) - var(--topbar-h));
+  overflow: hidden;
+  padding: 10px 10px max(10px, env(safe-area-inset-bottom));
+}
+
+/* 練習面板佔滿容器 */
+body.practiceMode #viewPractice{
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  overflow: hidden;
+}
+
+body.practiceMode .practiceTop{
+  flex: 0 0 auto;
+  margin-bottom: 6px;
+}
+
+/* 舞台吃剩下高度 */
+body.practiceMode .stage{
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+
+/* 卡片撐開中間空間 */
+body.practiceMode .flashcard{
+  flex: 1 1 auto;
+  height: auto;
+  min-height: 170px;
+  width: 100%;
+  max-width: 520px;
+  margin: 0 auto;
+}
+
+/* ✅ 把按鈕推到最底部，消除底下那塊大空白 */
+body.practiceMode .controlsBig{
+  margin-top: auto;
+
+  width: 100%;
+  max-width: 520px;
+  margin-left: auto;
+  margin-right: auto;
+
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* ✅ 永遠 2×2 */
+  gap: 10px;
+
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+body.practiceMode .controlsBig .btn{
+  width: 100%;
+  min-width: 0;
+  min-height: 56px;
+  padding: 14px 10px;
+  font-size: clamp(16px, 4.2vw, 20px);
+}
+
+  
 
   
 }
