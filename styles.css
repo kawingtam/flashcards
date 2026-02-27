@@ -11,6 +11,10 @@
   --primary2: #60a5fa;
 
   --radius: 18px;
+
+  /* Practice sizing vars (JS updates these for iPhone accuracy) */
+  --app-h: 100vh;
+  --topbar-h: 72px;
 }
 
 *{ box-sizing: border-box; }
@@ -18,7 +22,7 @@ html, body{ height: 100%; }
 body{
   margin: 0;
   font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans";
-  font-size: 18px; /* 長輩友善：字體稍大 */
+  font-size: 18px;
   color: var(--text);
   background:
     radial-gradient(900px 500px at 15% 0%, rgba(96,165,250,0.35), transparent 60%),
@@ -42,11 +46,10 @@ body{
 
 .brand{ display:flex; align-items:center; gap: 10px; }
 .logo{ font-size: 22px; }
-.title{ font-weight: 900; letter-spacing: .2px; }
-.subtitle{ color: var(--muted); font-size: 13px; margin-top: 2px; }
+.title{ font-weight: 900; letter-spacing: .2px; font-size: 20px; }
 
 .container{
-  max-width: 760px; /* 更簡單：不要太寬 */
+  max-width: 760px;
   margin: 0 auto;
   padding: 16px 12px 26px;
 }
@@ -79,11 +82,41 @@ p{ line-height: 1.55; }
   margin-top: 12px;
   flex-wrap: wrap;
 }
+.centerRow{ justify-content: center; }
 
-/* 大按鈕（引導式選項） */
+/* Buttons (elder-friendly) */
+.btn{
+  border: 1px solid var(--border);
+  background: #ffffff;
+  color: var(--text);
+
+  padding: 18px 22px;
+  min-height: 60px;
+  font-size: 20px;
+  font-weight: 800;
+
+  border-radius: 20px;
+  cursor:pointer;
+  box-shadow: 0 8px 18px rgba(2,6,23,0.06);
+}
+.btn:hover{ border-color: rgba(37,99,235,0.25); }
+.btn:active{ transform: translateY(1px); }
+.btn:disabled{ opacity: 0.55; cursor: not-allowed; box-shadow:none; }
+
+.btn.primary{
+  border-color: rgba(37,99,235,0.25);
+  background: linear-gradient(180deg, rgba(96,165,250,0.55), rgba(37,99,235,0.35));
+  color: #0b1220;
+}
+.btn.ghost{
+  background: transparent;
+  box-shadow: none;
+}
+
+/* Wizard choices */
 .choiceGrid{
   display:grid;
-  grid-template-columns: 1fr; /* 單欄：手機/長輩更清楚 */
+  grid-template-columns: 1fr;
   gap: 12px;
   margin-top: 10px;
 }
@@ -101,17 +134,10 @@ p{ line-height: 1.55; }
 .bigChoice:hover{ border-color: rgba(37,99,235,0.25); }
 .bigChoice:active{ transform: translateY(1px); }
 
-.bigChoiceTitle{
-  font-weight: 900;
-  font-size: 20px;
-}
-.bigChoiceDesc{
-  margin-top: 6px;
-  color: var(--muted);
-  font-size: 14px;
-}
+.bigChoiceTitle{ font-weight: 900; font-size: 20px; }
+.bigChoiceDesc{ margin-top: 6px; color: var(--muted); font-size: 14px; }
 
-/* 選擇組別（單欄盒子） */
+/* Set list (single column) */
 .setList{
   display:grid;
   gap: 12px;
@@ -136,37 +162,7 @@ p{ line-height: 1.55; }
 .setItem strong{ display:block; font-weight: 900; }
 .setItem .meta{ margin-top: 4px; font-size: 14px; color: var(--muted); }
 
-.btn{
-  border: 1px solid var(--border);
-  background: #ffffff;
-  color: var(--text);
-
-  /* ✅ 更大、更好按 */
-  padding: 18px 22px;
-  min-height: 60px;
-  font-size: 20px;
-  font-weight: 800;
-
-  border-radius: 20px;
-  cursor:pointer;
-  box-shadow: 0 8px 18px rgba(2,6,23,0.06);
-}
-
-
-.btn:hover{ border-color: rgba(37,99,235,0.25); }
-.btn:active{ transform: translateY(1px); }
-.btn:disabled{ opacity: 0.55; cursor: not-allowed; box-shadow:none; }
-
-.btn.primary{
-  border-color: rgba(37,99,235,0.25);
-  background: linear-gradient(180deg, rgba(96,165,250,0.55), rgba(37,99,235,0.35));
-  color: #0b1220;
-}
-.btn.ghost{
-  background: transparent;
-  box-shadow: none;
-}
-
+/* Practice */
 .practiceTop{
   display:flex;
   justify-content: space-between;
@@ -175,7 +171,7 @@ p{ line-height: 1.55; }
   flex-wrap: wrap;
   margin-bottom: 10px;
 }
-.progress{ font-weight: 900; }
+.progress{ font-weight: 900; font-size: 26px; }
 
 .stage{
   display:grid;
@@ -197,12 +193,12 @@ p{ line-height: 1.55; }
 
 /* Flashcard */
 .flashcard{
-  height: clamp(240px, 52vh, 360px);
+  width: 100%;
+  max-width: 520px;
+  height: 320px; /* default; practiceMode overrides for single screen */
   perspective: 1200px;
   outline: none;
   touch-action: manipulation;
-  width: 100%;
-  max-width: 520px;
   margin: 0 auto;
 }
 .flashcard-inner{
@@ -256,24 +252,14 @@ p{ line-height: 1.55; }
   user-select:none;
 }
 
-/* ✅ 朗讀/翻面/下一張：置中排列、可自動換行 */
+/* Controls (default, will be overridden in practiceMode) */
 .controlsBig{
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;   /* 置中 */
-  gap: 14px;
   width: 100%;
   max-width: 520px;
   margin: 0 auto;
-}
-
-/* 按鈕大小一致、好按，手機會自動換行但仍置中 */
-.controlsBig .btn{
-  min-width: 150px;
-}
-
-@media (min-width: 560px){
-  .controlsBig{ grid-template-columns: 1fr 1fr 1fr 1fr; }
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
 }
 
 .doneBox{
@@ -288,232 +274,26 @@ p{ line-height: 1.55; }
   box-shadow: 0 22px 60px rgba(2,6,23,0.16);
 }
 
+/* Footer */
 .footer{
   text-align:center;
   padding: 12px 12px 18px;
 }
 
-/* 讓「朗讀/翻面/下一張」整排置中 */
-.controlsBig{
-  justify-content: center;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-/* 讓「上一步 / 下一步」那一排置中 */
-.row{
-  justify-content: center;
-}
-
-@media (max-width: 480px){
-  /* Reduce extra padding on small screens */
-  .container{ padding: 10px 10px 14px; }
-  .panel{ padding: 10px; }
-
-  /* Optional: hide hint to save vertical space */
-  .hint{ display: none; }
-
-  /* Make the card shorter so buttons fit without scrolling */
-  .flashcard{
-    height: 42svh;   /* stable viewport height on mobile */
-    min-height: 220px;
-    max-height: 300px;
-  }
-
-  /* Keep all 3 buttons in ONE row (no wrap -> less height) */
-  .controlsBig{
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 10px;
-  }
-
-  /* Slightly smaller on phone so they fit, still elderly-friendly */
-  .controlsBig .btn{
-    min-height: 54px;
-    font-size: 18px;
-    padding: 14px 10px;
-    min-width: 0; /* allow grid to shrink properly */
-  }
-
-  /* =========================
-   Practice full-screen layout
+/* =========================
+   Practice Mode: single screen, no scroll
    ========================= */
-body.practiceMode .footer{
-  display: none; /* 手機上省高度 */
-}
-
-/* 讓主內容區佔滿手機可視高度（扣掉上方 topbar） */
-body.practiceMode .container{
-  height: calc(100svh - 64px); /* 64px 約等於 topbar 高度 */
-  overflow: hidden;            /* ✅ 不要整頁捲動 */
-  padding: 10px 10px 12px;
-}
-
-/* 練習面板變成「上下排版」：上=進度，下=卡片+按鈕 */
-body.practiceMode #viewPractice{
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  padding: 10px;
-}
-
-/* 上方狀態列固定高度 */
-body.practiceMode .practiceTop{
-  flex: 0 0 auto;
-  margin-bottom: 6px;
-}
-
-/* 中間舞台：卡片自動吃剩下高度 */
-body.practiceMode .stage{
-  flex: 1 1 auto;
-  min-height: 0;                 /* ✅ 讓內部可以縮 */
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  width: 100%;
-}
-
-/* 提示文字在手機先隱藏（省高度；你要留也行） */
-@media (max-width: 520px){
-  body.practiceMode .hint{ display: none; }
-}
-
-/* 卡片：用 flex 吃剩下空間，避免超出 */
-body.practiceMode .flashcard{
-  flex: 1 1 auto;
-  height: auto;                  /* ✅ 不用固定 vh */
-  min-height: 180px;
-  width: 100%;
-  max-width: 520px;
-  margin: 0 auto;
-}
-
-/* 按鈕區：固定在卡片下方，同一屏內可見 */
-body.practiceMode .controlsBig{
-  flex: 0 0 auto;
-  width: 100%;
-  max-width: 520px;
-  margin: 0 auto;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr); /* ✅ 一排三顆，不佔兩行 */
-  gap: 10px;
-  padding-bottom: env(safe-area-inset-bottom); /* iPhone 底部安全區 */
-}
-
-/* 手機按鈕自適應，不會把版面撐爆 */
-body.practiceMode .controlsBig .btn{
-  min-width: 0;
-  min-height: 52px;
-  padding: 14px 10px;
-  font-size: clamp(16px, 4.2vw, 20px);
-}
-
-  /* ================
-   Practice Mode: single-screen, no scroll
-   ================ */
 body.practiceMode{
-  overflow: hidden; /* ✅ 整頁不捲動 */
+  overflow: hidden;
 }
-
-/* footer 在練習模式隱藏，省高度 */
 body.practiceMode .footer{
   display: none;
 }
-
-/* ✅ 用 JS 實際量到的 topbar 高度，避免算錯而溢出 */
-body.practiceMode .container{
-  height: calc(100svh - var(--topbar-h, 72px));
-  overflow: hidden;
-  padding: 10px 10px max(10px, env(safe-area-inset-bottom));
-}
-
-/* 練習頁佔滿 container */
-body.practiceMode #viewPractice{
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  padding: 10px;
-}
-
-/* 上面狀態列固定 */
-body.practiceMode .practiceTop{
-  flex: 0 0 auto;
-  margin-bottom: 6px;
-}
-
-/* 舞台吃剩下空間 */
-body.practiceMode .stage{
-  flex: 1 1 auto;
-  min-height: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-/* 手機上把提示縮短高度（你也可以保留） */
-@media (max-width: 520px){
-  body.practiceMode .hint{
-    font-size: 13px;
-    gap: 6px;
-  }
-}
-
-/* 卡片吃掉剩下高度，不會撐爆 */
-body.practiceMode .flashcard{
-  flex: 1 1 auto;
-  height: auto;
-  min-height: 170px;
-  width: 100%;
-  max-width: 520px;
-  margin: 0 auto;
-}
-
-/* ✅ 4 顆按鈕：寬螢幕一排四顆；小螢幕變 2x2（仍不捲動，卡片會自動縮） */
-body.practiceMode .controlsBig{
-  flex: 0 0 auto;
-  width: 100%;
-  max-width: 520px;
-  margin: 0 auto;
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 10px;
-}
-
-@media (max-width: 520px){
-  body.practiceMode .controlsBig{
-    grid-template-columns: 1fr 1fr; /* 2x2 */
-  }
-}
-
-/* 按鈕大小：手機不會太高，避免把內容擠出螢幕 */
-body.practiceMode .controlsBig .btn{
-  min-width: 0;
-  min-height: 52px;
-  padding: 14px 10px;
-  font-size: clamp(16px, 4.2vw, 20px);
-}
-  /* ========= Practice mode: single screen, no overflow ========= */
-:root{
-  --app-h: 100vh;      /* JS 會改成 window.innerHeight(px) */
-  --topbar-h: 72px;    /* JS 會改成實際 topbar 高度(px) */
-}
-
-body.practiceMode{
-  overflow: hidden; /* ✅ 整頁不捲動 */
-}
-
-body.practiceMode .footer{
-  display: none; /* 省高度，避免需要捲動 */
-}
-
-/* ✅ 用真正的 app 高度 - topbar 高度，避免 iPhone 底部溢出 */
 body.practiceMode .container{
   height: calc(var(--app-h) - var(--topbar-h));
   overflow: hidden;
   padding: 10px 10px max(10px, env(safe-area-inset-bottom));
 }
-
-/* 練習面板佔滿容器 */
 body.practiceMode #viewPractice{
   height: 100%;
   display: flex;
@@ -521,13 +301,10 @@ body.practiceMode #viewPractice{
   padding: 10px;
   overflow: hidden;
 }
-
 body.practiceMode .practiceTop{
   flex: 0 0 auto;
   margin-bottom: 6px;
 }
-
-/* 舞台吃剩下高度 */
 body.practiceMode .stage{
   flex: 1 1 auto;
   min-height: 0;
@@ -536,8 +313,9 @@ body.practiceMode .stage{
   gap: 10px;
   width: 100%;
 }
-
-/* 卡片撐開中間空間 */
+@media (max-width: 520px){
+  body.practiceMode .hint{ display: none; }
+}
 body.practiceMode .flashcard{
   flex: 1 1 auto;
   height: auto;
@@ -546,32 +324,23 @@ body.practiceMode .flashcard{
   max-width: 520px;
   margin: 0 auto;
 }
-
-/* ✅ 把按鈕推到最底部，消除底下那塊大空白 */
 body.practiceMode .controlsBig{
   margin-top: auto;
-
   width: 100%;
   max-width: 520px;
   margin-left: auto;
   margin-right: auto;
 
   display: grid;
-  grid-template-columns: 1fr 1fr; /* ✅ 永遠 2×2 */
+  grid-template-columns: 1fr 1fr; /* ✅ always 2×2 */
   gap: 10px;
 
   padding-bottom: env(safe-area-inset-bottom);
 }
-
 body.practiceMode .controlsBig .btn{
   width: 100%;
   min-width: 0;
   min-height: 56px;
   padding: 14px 10px;
   font-size: clamp(16px, 4.2vw, 20px);
-}
-
-  
-
-  
 }
