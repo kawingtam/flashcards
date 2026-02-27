@@ -1,8 +1,8 @@
 {
   "sets": [
     {
-      "id": "word-1",
-      "name": "🔵Word 第 1 組",
+      "id": "word-01",
+      "name": "🔵Word 01",
       "cards": [
         {
           "zh": "文档",
@@ -23,7 +23,13 @@
         {
           "zh": "倾斜",
           "en": "Italic"
-        },
+        }
+      ]
+    },
+    {
+      "id": "word-02",
+      "name": "🔵Word 02",
+      "cards": [
         {
           "zh": "下划线",
           "en": "Underline"
@@ -47,8 +53,8 @@
       ]
     },
     {
-      "id": "word-2",
-      "name": "🔵Word 第 2 組",
+      "id": "word-03",
+      "name": "🔵Word 03",
       "cards": [
         {
           "zh": "居中",
@@ -69,7 +75,13 @@
         {
           "zh": "缩进",
           "en": "Indent"
-        },
+        }
+      ]
+    },
+    {
+      "id": "word-04",
+      "name": "🔵Word 04",
+      "cards": [
         {
           "zh": "项目符号",
           "en": "Bullet points"
@@ -93,8 +105,8 @@
       ]
     },
     {
-      "id": "word-3",
-      "name": "🔵Word 第 3 組",
+      "id": "word-05",
+      "name": "🔵Word 05",
       "cards": [
         {
           "zh": "纵向",
@@ -115,7 +127,13 @@
         {
           "zh": "页脚",
           "en": "Footer"
-        },
+        }
+      ]
+    },
+    {
+      "id": "word-06",
+      "name": "🔵Word 06",
+      "cards": [
         {
           "zh": "分隔符",
           "en": "Break"
@@ -139,8 +157,8 @@
       ]
     },
     {
-      "id": "word-4",
-      "name": "🔵Word 第 4 組",
+      "id": "word-07",
+      "name": "🔵Word 07",
       "cards": [
         {
           "zh": "单元格",
@@ -161,7 +179,13 @@
         {
           "zh": "形状",
           "en": "Shape"
-        },
+        }
+      ]
+    },
+    {
+      "id": "word-08",
+      "name": "🔵Word 08",
+      "cards": [
         {
           "zh": "文本框",
           "en": "Text box"
@@ -185,8 +209,8 @@
       ]
     },
     {
-      "id": "word-5",
-      "name": "🔵Word 第 5 組",
+      "id": "word-09",
+      "name": "🔵Word 09",
       "cards": [
         {
           "zh": "剪切",
@@ -207,7 +231,13 @@
         {
           "zh": "查找",
           "en": "Find"
-        },
+        }
+      ]
+    },
+    {
+      "id": "word-10",
+      "name": "🔵Word 10",
+      "cards": [
         {
           "zh": "替换",
           "en": "Replace"
@@ -231,8 +261,8 @@
       ]
     },
     {
-      "id": "word-6",
-      "name": "🔵Word 第 6 組",
+      "id": "word-11",
+      "name": "🔵Word 11",
       "cards": [
         {
           "zh": "样式",
@@ -253,7 +283,13 @@
         {
           "zh": "邮件合并",
           "en": "Mail merge"
-        },
+        }
+      ]
+    },
+    {
+      "id": "word-12",
+      "name": "🔵Word 12",
+      "cards": [
         {
           "zh": "信封",
           "en": "Envelope"
@@ -277,8 +313,8 @@
       ]
     },
     {
-      "id": "word-7",
-      "name": "🔵Word 第 7 組",
+      "id": "word-13",
+      "name": "🔵Word 13",
       "cards": [
         {
           "zh": "接受",
@@ -299,7 +335,13 @@
         {
           "zh": "份数",
           "en": "Copies"
-        },
+        }
+      ]
+    },
+    {
+      "id": "word-14",
+      "name": "🔵Word 14",
+      "cards": [
         {
           "zh": "页数",
           "en": "Pages"
@@ -323,8 +365,8 @@
       ]
     },
     {
-      "id": "word-8",
-      "name": "🔵Word 第 8 組",
+      "id": "word-15",
+      "name": "🔵Word 15",
       "cards": [
         {
           "zh": "功能区",
@@ -345,7 +387,13 @@
         {
           "zh": "保存",
           "en": "Save"
-        },
+        }
+      ]
+    },
+    {
+      "id": "word-16",
+      "name": "🔵Word 16",
+      "cards": [
         {
           "zh": "另存为",
           "en": "Save As"
