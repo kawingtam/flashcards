@@ -131,6 +131,10 @@ document.addEventListener("DOMContentLoaded", async () => {
     alert("⚠️ 無法讀取 data/sets.json。\n請確認檔案存在於 flashcards/data/sets.json，並用 http://localhost:8000 開啟。");
     state.sets = [];
   }
+
+  updateViewportVars();
+  window.addEventListener("resize", updateViewportVars);
+  window.addEventListener("orientationchange", () => setTimeout(updateViewportVars, 50));
 });
 
 /* -------------------- Data -------------------- */
@@ -280,6 +284,8 @@ function startPractice(){
   if (topbar) {
     document.documentElement.style.setProperty("--topbar-h", `${topbar.offsetHeight}px`);
   }
+
+  updateViewportVars();
   
 }
 
