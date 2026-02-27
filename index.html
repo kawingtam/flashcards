@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="theme-color" content="#f8fafc" />
-  <title>單字卡練習（中文 ↔ 英文）</title>
+  <title>中文 ↔ 英文</title>
   <link rel="stylesheet" href="./styles.css" />
   <script defer src="./app.js"></script>
 </head>
@@ -26,11 +26,12 @@
   <main class="container">
     <!-- 引導式設定頁 -->
     <section id="viewSetup" class="panel">
-      <h1>開始前，跟著做 3 個簡單選擇</h1>
+      <h1>開始前，跟著做 3 個選擇</h1>
 
       <!-- Step 1 -->
       <div id="step1" class="wizardStep">
         <h2>第 1 步：想練習一組，還是多組？</h2>
+
         <div class="choiceGrid">
           <button id="btnModeSingle" class="bigChoice" type="button">
             <div class="bigChoiceTitle">只練習一組</div>
@@ -39,11 +40,11 @@
 
           <button id="btnModeMulti" class="bigChoice" type="button">
             <div class="bigChoiceTitle">同時練習多組</div>
-            <div class="bigChoiceDesc">例如：選第 1 組 + 第 3 組</div>
+            <div class="bigChoiceDesc">例如：第 1 組 + 第 3 組</div>
           </button>
         </div>
 
-        <div class="row">
+        <div class="row centerRow">
           <button id="btnStep1Next" class="btn primary" disabled>下一步</button>
         </div>
       </div>
@@ -53,10 +54,9 @@
         <h2>第 2 步：請選擇要練習的組別</h2>
         <p class="muted small" id="modeHint">—</p>
 
-        <!-- 單欄顯示選擇盒 -->
         <div id="setList" class="setList oneColumn"></div>
 
-        <div class="row">
+        <div class="row centerRow">
           <button id="btnStep2Back" class="btn">上一步</button>
           <button id="btnStep2Next" class="btn primary" disabled>下一步</button>
         </div>
@@ -78,7 +78,7 @@
           </button>
         </div>
 
-        <div class="row">
+        <div class="row centerRow">
           <button id="btnStep3Back" class="btn">上一步</button>
           <button id="btnStart" class="btn primary" disabled>開始練習</button>
         </div>
@@ -97,7 +97,7 @@
       <div class="stage">
         <div class="hint">
           <span>點卡片可翻面</span>
-          <span>按「下一張 / 上一張」換卡</span>
+          <span>按「上一張 / 下一張」換卡</span>
         </div>
 
         <div id="card" class="flashcard" role="button" aria-label="單字卡" tabindex="0">
@@ -117,7 +117,7 @@
           </div>
         </div>
 
-        <!-- 大按鈕：更適合長輩 -->
+        <!-- ✅ 2×2 按鈕；上一張/下一張同色 -->
         <div class="controlsBig">
           <button id="btnPrev" class="btn primary">上一張</button>
           <button id="btnNext" class="btn primary">下一張</button>
@@ -128,7 +128,7 @@
         <div id="doneBox" class="doneBox hidden">
           <h2>完成啦 🎉</h2>
           <p class="muted">已經練習完這次選擇的單字卡。</p>
-          <div class="row">
+          <div class="row centerRow">
             <button id="btnRestart" class="btn primary">再練一次</button>
             <button id="btnBackToSets" class="btn">回到選擇組別</button>
           </div>
