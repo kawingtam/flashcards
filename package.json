@@ -1,14 +1,24 @@
 {
-  "name": "flashcards",
+  "name": "workplace-english-flashcards",
   "version": "1.0.0",
-  "description": "",
+  "description": "A bilingual Chinese-English flashcard web app for workplace English practice.",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build:data": "node excel_to_sets.js vocab.xlsx ./data/sets.json",
+    "preview": "python3 -m http.server 8000"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": [
+    "flashcards",
+    "language-learning",
+    "workplace-english",
+    "chinese",
+    "english",
+    "javascript",
+    "github-pages",
+    "web-speech-api"
+  ],
+  "author": "Ka Wing Tam",
+  "license": "MIT",
   "type": "commonjs",
   "dependencies": {
     "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.2/xlsx-0.20.2.tgz"

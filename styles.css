@@ -11,10 +11,6 @@
   --primary2: #60a5fa;
 
   --radius: 18px;
-
-  /* Practice sizing vars (JS updates these for iPhone accuracy) */
-  --app-h: 100vh;
-  --topbar-h: 72px;
 }
 
 *{ box-sizing: border-box; }
@@ -22,7 +18,7 @@ html, body{ height: 100%; }
 body{
   margin: 0;
   font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans";
-  font-size: 18px;
+  font-size: 18px; /* 長輩友善：字體稍大 */
   color: var(--text);
   background:
     radial-gradient(900px 500px at 15% 0%, rgba(96,165,250,0.35), transparent 60%),
@@ -46,10 +42,11 @@ body{
 
 .brand{ display:flex; align-items:center; gap: 10px; }
 .logo{ font-size: 22px; }
-.title{ font-weight: 900; letter-spacing: .2px; font-size: 20px; }
+.title{ font-weight: 900; letter-spacing: .2px; }
+.subtitle{ color: var(--muted); font-size: 13px; margin-top: 2px; }
 
 .container{
-  max-width: 760px;
+  max-width: 760px; /* 更簡單：不要太寬 */
   margin: 0 auto;
   padding: 16px 12px 26px;
 }
@@ -82,41 +79,11 @@ p{ line-height: 1.55; }
   margin-top: 12px;
   flex-wrap: wrap;
 }
-.centerRow{ justify-content: center; }
 
-/* Buttons (elder-friendly) */
-.btn{
-  border: 1px solid var(--border);
-  background: #ffffff;
-  color: var(--text);
-
-  padding: 18px 22px;
-  min-height: 60px;
-  font-size: 20px;
-  font-weight: 800;
-
-  border-radius: 20px;
-  cursor:pointer;
-  box-shadow: 0 8px 18px rgba(2,6,23,0.06);
-}
-.btn:hover{ border-color: rgba(37,99,235,0.25); }
-.btn:active{ transform: translateY(1px); }
-.btn:disabled{ opacity: 0.55; cursor: not-allowed; box-shadow:none; }
-
-.btn.primary{
-  border-color: rgba(37,99,235,0.25);
-  background: linear-gradient(180deg, rgba(96,165,250,0.55), rgba(37,99,235,0.35));
-  color: #0b1220;
-}
-.btn.ghost{
-  background: transparent;
-  box-shadow: none;
-}
-
-/* Wizard choices */
+/* 大按鈕（引導式選項） */
 .choiceGrid{
   display:grid;
-  grid-template-columns: 1fr;
+  grid-template-columns: 1fr; /* 單欄：手機/長輩更清楚 */
   gap: 12px;
   margin-top: 10px;
 }
@@ -134,10 +101,17 @@ p{ line-height: 1.55; }
 .bigChoice:hover{ border-color: rgba(37,99,235,0.25); }
 .bigChoice:active{ transform: translateY(1px); }
 
-.bigChoiceTitle{ font-weight: 900; font-size: 20px; }
-.bigChoiceDesc{ margin-top: 6px; color: var(--muted); font-size: 14px; }
+.bigChoiceTitle{
+  font-weight: 900;
+  font-size: 20px;
+}
+.bigChoiceDesc{
+  margin-top: 6px;
+  color: var(--muted);
+  font-size: 14px;
+}
 
-/* Set list (single column) */
+/* 選擇組別（單欄盒子） */
 .setList{
   display:grid;
   gap: 12px;
@@ -162,7 +136,37 @@ p{ line-height: 1.55; }
 .setItem strong{ display:block; font-weight: 900; }
 .setItem .meta{ margin-top: 4px; font-size: 14px; color: var(--muted); }
 
-/* Practice */
+.btn{
+  border: 1px solid var(--border);
+  background: #ffffff;
+  color: var(--text);
+
+  /* ✅ 更大、更好按 */
+  padding: 18px 22px;
+  min-height: 60px;
+  font-size: 20px;
+  font-weight: 800;
+
+  border-radius: 20px;
+  cursor:pointer;
+  box-shadow: 0 8px 18px rgba(2,6,23,0.06);
+}
+
+
+.btn:hover{ border-color: rgba(37,99,235,0.25); }
+.btn:active{ transform: translateY(1px); }
+.btn:disabled{ opacity: 0.55; cursor: not-allowed; box-shadow:none; }
+
+.btn.primary{
+  border-color: rgba(37,99,235,0.25);
+  background: linear-gradient(180deg, rgba(96,165,250,0.55), rgba(37,99,235,0.35));
+  color: #0b1220;
+}
+.btn.ghost{
+  background: transparent;
+  box-shadow: none;
+}
+
 .practiceTop{
   display:flex;
   justify-content: space-between;
@@ -171,7 +175,7 @@ p{ line-height: 1.55; }
   flex-wrap: wrap;
   margin-bottom: 10px;
 }
-.progress{ font-weight: 900; font-size: 26px; }
+.progress{ font-weight: 900; }
 
 .stage{
   display:grid;
@@ -179,7 +183,6 @@ p{ line-height: 1.55; }
   gap: 12px;
   margin-top: 10px;
   position: relative;
-  width: 100%;
 }
 
 .hint{
@@ -193,13 +196,11 @@ p{ line-height: 1.55; }
 
 /* Flashcard */
 .flashcard{
-  width: 100%;
-  max-width: 520px;
-  height: 320px; /* default; practiceMode overrides for single screen */
+  width: min(520px, 94vw);
+  height: clamp(240px, 52vh, 360px);
   perspective: 1200px;
   outline: none;
   touch-action: manipulation;
-  margin: 0 auto;
 }
 .flashcard-inner{
   width: 100%;
@@ -252,14 +253,23 @@ p{ line-height: 1.55; }
   user-select:none;
 }
 
-/* Controls (default, will be overridden in practiceMode) */
+/* ✅ 朗讀/翻面/下一張：置中排列、可自動換行 */
 .controlsBig{
-  width: 100%;
-  max-width: 520px;
-  margin: 0 auto;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;   /* 置中 */
+  gap: 14px;
+  width: min(520px, 94vw);
+  margin: 0 auto;            /* 整塊容器置中 */
+}
+
+/* 按鈕大小一致、好按，手機會自動換行但仍置中 */
+.controlsBig .btn{
+  min-width: 150px;
+}
+
+@media (min-width: 560px){
+  .controlsBig{ grid-template-columns: 1fr 1fr 1fr 1fr; }
 }
 
 .doneBox{
@@ -274,73 +284,19 @@ p{ line-height: 1.55; }
   box-shadow: 0 22px 60px rgba(2,6,23,0.16);
 }
 
-/* Footer */
 .footer{
   text-align:center;
   padding: 12px 12px 18px;
 }
 
-/* =========================
-   Practice Mode: single screen, no scroll
-   ========================= */
-body.practiceMode{
-  overflow: hidden;
-}
-body.practiceMode .footer{
-  display: none;
-}
-body.practiceMode .container{
-  height: calc(var(--app-h) - var(--topbar-h));
-  overflow: hidden;
-  padding: 10px 10px max(10px, env(safe-area-inset-bottom));
-}
-body.practiceMode #viewPractice{
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  padding: 10px;
-  overflow: hidden;
-}
-body.practiceMode .practiceTop{
-  flex: 0 0 auto;
-  margin-bottom: 6px;
-}
-body.practiceMode .stage{
-  flex: 1 1 auto;
-  min-height: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  width: 100%;
-}
-@media (max-width: 520px){
-  body.practiceMode .hint{ display: none; }
-}
-body.practiceMode .flashcard{
-  flex: 1 1 auto;
-  height: auto;
-  min-height: 170px;
-  width: 100%;
-  max-width: 520px;
-  margin: 0 auto;
-}
-body.practiceMode .controlsBig{
-  margin-top: auto;
-  width: 100%;
-  max-width: 520px;
+/* 讓「朗讀/翻面/下一張」整排置中 */
+.controlsBig{
+  justify-content: center;
   margin-left: auto;
   margin-right: auto;
-
-  display: grid;
-  grid-template-columns: 1fr 1fr; /* ✅ always 2×2 */
-  gap: 10px;
-
-  padding-bottom: env(safe-area-inset-bottom);
 }
-body.practiceMode .controlsBig .btn{
-  width: 100%;
-  min-width: 0;
-  min-height: 56px;
-  padding: 14px 10px;
-  font-size: clamp(16px, 4.2vw, 20px);
+
+/* 讓「上一步 / 下一步」那一排置中 */
+.row{
+  justify-content: center;
 }

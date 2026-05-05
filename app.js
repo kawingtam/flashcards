@@ -4,10 +4,8 @@
  * - Wizard flow: (1) single/multi -> (2) choose sets -> (3) choose direction -> start
  * - Single-column selection boxes
  * - Always shuffle/randomize
- * - Tap to flip
- * - NO swipe to next
- * - Speak current visible side (Web Speech API)
- * - Practice mode fits in one screen (iPhone-safe height)
+ * - Tap to flip, swipe up to next (no flip required)
+ * - Speak for both languages (Web Speech API)
  */
 
 const state = {
@@ -20,6 +18,7 @@ const state = {
   sessionIndex: 0,
   flipped: false,
 
+  touchStartY: null,
   voices: [],
 };
 
@@ -60,67 +59,73 @@ document.addEventListener("DOMContentLoaded", async () => {
   el.frontLangBadge = $("frontLangBadge");
   el.backLangBadge = $("backLangBadge");
 
-  el.btnPrev = $("btnPrev");
-  el.btnNext = $("btnNext");
   el.btnSpeak = $("btnSpeak");
   el.btnFlip = $("btnFlip");
+  el.btnNext = $("btnNext");
 
   el.doneBox = $("doneBox");
   el.btnRestart = $("btnRestart");
   el.btnBackToSets = $("btnBackToSets");
 
-  // Init voices + viewport vars
+  // ✅ 先綁事件（避免資料讀取失敗就整個死掉）
   initVoices();
-  updateViewportVars();
-  window.addEventListener("resize", updateViewportVars);
-  window.addEventListener("orientationchange", () => setTimeout(updateViewportVars, 50));
 
-  // Bind events
-  if (el.btnHome) el.btnHome.addEventListener("click", goHome);
+  el.btnHome.addEventListener("click", goHome);
 
-  if (el.btnModeSingle) el.btnModeSingle.addEventListener("click", () => chooseMode("single"));
-  if (el.btnModeMulti) el.btnModeMulti.addEventListener("click", () => chooseMode("multi"));
-  if (el.btnStep1Next) el.btnStep1Next.addEventListener("click", () => goStep(2));
+  el.btnModeSingle.addEventListener("click", () => chooseMode("single"));
+  el.btnModeMulti.addEventListener("click", () => chooseMode("multi"));
+  el.btnStep1Next.addEventListener("click", () => goStep(2));
 
-  if (el.btnStep2Back) el.btnStep2Back.addEventListener("click", () => goStep(1));
-  if (el.btnStep2Next) el.btnStep2Next.addEventListener("click", () => goStep(3));
+  el.btnStep2Back.addEventListener("click", () => goStep(1));
+  el.btnStep2Next.addEventListener("click", () => goStep(3));
 
-  if (el.btnDirZhFirst) el.btnDirZhFirst.addEventListener("click", () => chooseDirection("zh-first"));
-  if (el.btnDirEnFirst) el.btnDirEnFirst.addEventListener("click", () => chooseDirection("en-first"));
-  if (el.btnStep3Back) el.btnStep3Back.addEventListener("click", () => goStep(2));
-  if (el.btnStart) el.btnStart.addEventListener("click", startPractice);
+  el.btnDirZhFirst.addEventListener("click", () => chooseDirection("zh-first"));
+  el.btnDirEnFirst.addEventListener("click", () => chooseDirection("en-first"));
+  el.btnStep3Back.addEventListener("click", () => goStep(2));
+  el.btnStart.addEventListener("click", startPractice);
 
-  if (el.card) el.card.addEventListener("click", flipCard);
+  el.card.addEventListener("click", flipCard);
 
-  if (el.btnPrev) el.btnPrev.addEventListener("click", prevCard);
-  if (el.btnNext) el.btnNext.addEventListener("click", nextCard);
-  if (el.btnFlip) el.btnFlip.addEventListener("click", flipCard);
-  if (el.btnSpeak) el.btnSpeak.addEventListener("click", (e) => {
-    e.stopPropagation();
-    speakVisibleSide();
-  });
+  el.card.addEventListener("touchstart", (e) => {
+    if (!e.touches?.length) return;
+    state.touchStartY = e.touches[0].clientY;
+  }, { passive: true });
 
-  if (el.btnRestart) el.btnRestart.addEventListener("click", () => {
+  el.card.addEventListener("touchend", (e) => {
+    if (state.touchStartY == null) return;
+    const endY = e.changedTouches?.[0]?.clientY;
+    if (endY == null) return;
+    const dy = endY - state.touchStartY;
+    state.touchStartY = null;
+    if (dy < -60) nextCard();
+  }, { passive: true });
+
+  el.btnFlip.addEventListener("click", flipCard);
+  el.btnNext.addEventListener("click", nextCard);
+  el.btnSpeak.addEventListener("click", (e) => {
+  e.stopPropagation();
+  speakVisibleSide();
+});
+
+  el.btnRestart.addEventListener("click", () => {
     state.sessionIndex = 0;
     setFlipped(false);
-    if (el.doneBox) el.doneBox.classList.add("hidden");
+    el.doneBox.classList.add("hidden");
     showCard();
-    updateNavButtons();
   });
 
-  if (el.btnBackToSets) el.btnBackToSets.addEventListener("click", goHome);
+  el.btnBackToSets.addEventListener("click", goHome);
 
-  // Show step 1
+  // ✅ 先顯示第一步（就算資料還沒載入也可以操作）
   goStep(1);
   updateStepButtons();
 
-  // Load sets
+  // ✅ 最後再載入 sets.json；失敗也不會讓整個頁面失效
   try {
-    // cache-bust for GitHub Pages
     await loadSets("./data/sets.json");
   } catch (err) {
     console.error(err);
-    alert("⚠️ 無法讀取 data/sets.json。\n請確認檔案存在於 data/sets.json。");
+    alert("⚠️ 無法讀取 data/sets.json。\n請確認檔案存在於 flashcards/data/sets.json，並用 http://localhost:8000 開啟。");
     state.sets = [];
   }
 });
@@ -128,7 +133,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 /* -------------------- Data -------------------- */
 
 async function loadSets(url){
-  const res = await fetch(`${url}?t=${Date.now()}`, { cache: "no-store" });
+  const res = await fetch(url);
   if (!res.ok) throw new Error(`無法載入：${url}`);
   const json = await res.json();
   state.sets = normalizeSets(json.sets || []);
@@ -169,13 +174,14 @@ function goStep(n){
 
 function chooseMode(mode){
   state.mode = mode;
-  state.selectedSetIds.clear();
+  state.selectedSetIds.clear(); // 重新選
   state.direction = null;
 
+  // Visual feedback (simple)
   setActiveChoice(el.btnModeSingle, mode === "single");
   setActiveChoice(el.btnModeMulti, mode === "multi");
 
-  if (el.btnStep1Next) el.btnStep1Next.disabled = false;
+  el.btnStep1Next.disabled = false;
   updateStepButtons();
 }
 
@@ -185,15 +191,12 @@ function setActiveChoice(button, on){
 }
 
 function renderSetList(){
-  if (!el.setList) return;
   el.setList.innerHTML = "";
 
-  if (el.modeHint){
-    el.modeHint.textContent =
-      state.mode === "single"
-        ? "提示：只可以選 1 組。"
-        : "提示：可以選多組（例如第 1 組 + 第 3 組）。";
-  }
+  el.modeHint.textContent =
+    state.mode === "single"
+      ? "提示：只可以選 1 組。"
+      : "提示：可以選多組（例如第 1 組 + 第 3 組）。";
 
   state.sets.forEach((set) => {
     const wrap = document.createElement("div");
@@ -219,6 +222,7 @@ function renderSetList(){
       if (state.mode === "single"){
         state.selectedSetIds.clear();
         state.selectedSetIds.add(id);
+        // rerender to uncheck others (radio group will handle, but keep state consistent)
         renderSetList();
       } else {
         if (input.checked) state.selectedSetIds.add(id);
@@ -239,7 +243,10 @@ function chooseDirection(dir){
 }
 
 function updateStepButtons(){
+  // Step2 next enabled when at least one set selected
   if (el.btnStep2Next) el.btnStep2Next.disabled = state.selectedSetIds.size === 0;
+
+  // Start enabled when direction chosen + set chosen
   if (el.btnStart) el.btnStart.disabled = !(state.selectedSetIds.size > 0 && !!state.direction);
 }
 
@@ -248,82 +255,66 @@ function updateStepButtons(){
 function startPractice(){
   const chosenSets = state.sets.filter(s => state.selectedSetIds.has(s.id));
   const cards = chosenSets.flatMap(s => s.cards.map(c => ({ ...c, _setId: s.id })));
+
   if (cards.length === 0) return;
 
+  // Always randomized
   state.sessionCards = shuffle([...cards]);
   state.sessionIndex = 0;
   setFlipped(false);
-  if (el.doneBox) el.doneBox.classList.add("hidden");
+  el.doneBox.classList.add("hidden");
 
-  if (el.setNamesText) el.setNamesText.textContent = chosenSets.map(s => s.name).join(" ・ ");
-
-  // ✅ enter practice mode BEFORE showing practice view
-  document.body.classList.add("practiceMode");
-  updateViewportVars();
+  el.setNamesText.textContent = chosenSets.map(s => s.name).join(" ・ ");
 
   hide(el.viewSetup);
   show(el.viewPractice);
   showCard();
-  updateNavButtons();
 
-  setTimeout(() => el.card && el.card.focus(), 0);
+  setTimeout(() => el.card.focus(), 0);
 }
 
 function showCard(){
   const total = state.sessionCards.length;
 
   if (state.sessionIndex >= total){
-    if (el.doneBox) el.doneBox.classList.remove("hidden");
-    if (el.progressText) el.progressText.textContent = `${total} / ${total}`;
+    el.doneBox.classList.remove("hidden");
+    el.progressText.textContent = `${total} / ${total}`;
     return;
   }
 
-  if (el.doneBox) el.doneBox.classList.add("hidden");
+  el.doneBox.classList.add("hidden");
 
   const card = state.sessionCards[state.sessionIndex];
   const frontIsZh = (state.direction === "zh-first");
 
-  if (el.frontText) el.frontText.textContent = frontIsZh ? card.zh : card.en;
-  if (el.backText)  el.backText.textContent  = frontIsZh ? card.en : card.zh;
+  el.frontText.textContent = frontIsZh ? card.zh : card.en;
+  el.backText.textContent  = frontIsZh ? card.en : card.zh;
 
-  if (el.frontLangBadge) el.frontLangBadge.textContent = frontIsZh ? "中文" : "英文";
-  if (el.backLangBadge)  el.backLangBadge.textContent  = frontIsZh ? "英文" : "中文";
+  el.frontLangBadge.textContent = frontIsZh ? "中文" : "英文";
+  el.backLangBadge.textContent  = frontIsZh ? "英文" : "中文";
 
-  if (el.progressText) el.progressText.textContent = `${state.sessionIndex + 1} / ${total}`;
-
+  el.progressText.textContent = `${state.sessionIndex + 1} / ${total}`;
   setFlipped(false);
-  updateNavButtons();
 }
 
 function flipCard(){
-  if (el.doneBox && !isHidden(el.doneBox)) return;
+  if (!isHidden(el.doneBox)) return;
   setFlipped(!state.flipped);
 }
 
 function setFlipped(on){
   state.flipped = on;
-  if (!el.card) return;
   if (on) el.card.classList.add("flipped");
   else el.card.classList.remove("flipped");
 }
 
 function nextCard(){
-  if (state.sessionIndex >= state.sessionCards.length - 1) return;
+  const total = state.sessionCards.length;
+  if (state.sessionIndex >= total) return;
+
   state.sessionIndex += 1;
   setFlipped(false);
   showCard();
-}
-
-function prevCard(){
-  if (state.sessionIndex <= 0) return;
-  state.sessionIndex -= 1;
-  setFlipped(false);
-  showCard();
-}
-
-function updateNavButtons(){
-  if (el.btnPrev) el.btnPrev.disabled = (state.sessionIndex <= 0);
-  if (el.btnNext) el.btnNext.disabled = (state.sessionIndex >= state.sessionCards.length - 1);
 }
 
 /* -------------------- Speech -------------------- */
@@ -338,14 +329,17 @@ function initVoices(){
 }
 
 function speakVisibleSide(){
-  if (state.sessionIndex >= state.sessionCards.length) return;
+  const total = state.sessionCards.length;
+  if (state.sessionIndex >= total) return;
 
   const card = state.sessionCards[state.sessionIndex];
   const frontIsZh = (state.direction === "zh-first");
+
+  // 目前看哪一面：沒翻＝正面；翻了＝背面
   const showingFront = !state.flipped;
 
   let text = "";
-  let lang = "";
+  let lang = ""; // "zh" | "en"
 
   if (showingFront) {
     text = frontIsZh ? card.zh : card.en;
@@ -370,15 +364,16 @@ function speak(text, langShort){
 
   const utter = new SpeechSynthesisUtterance(text);
 
+  // 依語言挑更適合的 voice（中文優先 zh-TW / zh-CN，避免 zh-HK）
   const v = pickBestVoice(langShort);
   if (v) {
     utter.voice = v;
-    utter.lang = v.lang;
+    utter.lang = v.lang; // 用 voice 自己的語言標記最準
   } else {
-    // fallback
     utter.lang = (langShort === "zh") ? "zh-HK" : "en-US";
   }
 
+  // 中文稍慢一點通常更自然
   utter.rate = (langShort === "zh") ? 0.9 : 0.95;
   utter.pitch = 1.0;
 
@@ -390,15 +385,16 @@ function pickBestVoice(langShort){
   if (!voices.length) return null;
 
   if (langShort === "zh") {
-    // Cantonese preferred if available; falls back to any Chinese
-    const prefer = ["zh-HK", "yue", "zh"];
+    // ✅ 廣東話優先（zh-HK）
+    const prefer = ["zh-HK", "zh-hk", "yue", "zh"];
     for (const p of prefer) {
-      const v = voices.find(vo => (vo.lang || "").toLowerCase().startsWith(p.toLowerCase()));
+      const v = voices.find(vo => (vo.lang || "").toLowerCase().startsWith(p));
       if (v) return v;
     }
     return null;
   }
 
+  // English
   const preferEn = ["en-US", "en"];
   for (const p of preferEn) {
     const v = voices.find(vo => (vo.lang || "").toLowerCase().startsWith(p.toLowerCase()));
@@ -412,9 +408,6 @@ function pickBestVoice(langShort){
 function goHome(){
   try { window.speechSynthesis?.cancel(); } catch {}
 
-  // ✅ remove practice mode first
-  document.body.classList.remove("practiceMode");
-
   state.sessionCards = [];
   state.sessionIndex = 0;
   setFlipped(false);
@@ -422,19 +415,19 @@ function goHome(){
   show(el.viewSetup);
   hide(el.viewPractice);
 
+  // Back to step 1, keep nothing selected (simpler for less tech users)
   state.mode = null;
   state.selectedSetIds.clear();
   state.direction = null;
-
-  if (el.btnStep1Next) el.btnStep1Next.disabled = true;
+  el.btnStep1Next.disabled = true;
   setActiveChoice(el.btnModeSingle, false);
   setActiveChoice(el.btnModeMulti, false);
 
   goStep(1);
 }
 
-function show(node){ if (node) node.classList.remove("hidden"); }
-function hide(node){ if (node) node.classList.add("hidden"); }
+function show(node){ node.classList.remove("hidden"); }
+function hide(node){ node.classList.add("hidden"); }
 function isHidden(node){ return node.classList.contains("hidden"); }
 
 function shuffle(arr){
@@ -452,14 +445,4 @@ function escapeHtml(str){
     .replaceAll(">", "&gt;")
     .replaceAll('"', "&quot;")
     .replaceAll("'", "&#039;");
-}
-
-/* iPhone / in-app browser safe height */
-function updateViewportVars(){
-  document.documentElement.style.setProperty("--app-h", `${window.innerHeight}px`);
-
-  const topbar = document.querySelector(".topbar");
-  if (topbar) {
-    document.documentElement.style.setProperty("--topbar-h", `${topbar.offsetHeight}px`);
-  }
 }
